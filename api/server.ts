@@ -1,6 +1,9 @@
 import express, { Application, Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcrypt'
+import { sign } from 'jsonwebtoken'
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 const app: Application = express()
 const prisma = new PrismaClient()
@@ -42,14 +45,21 @@ app.post('/api/auth/login', async (req: Request, res: Response) => {
     const user = await prisma.user.findUnique({ where: { email } })
 
     if (!user) {
-        return res.status(401).json({ error: "email or passwordが違います。"})
+        return res.status(401).json({ error: 'email or passwordが違います。' })
     }
 
     const isPasswordValid = bcrypt.compareSync(password, user.password)
 
     if (!isPasswordValid) {
-        return res.status(401).json({error: "パスワードが"})
+        return res.status(401).json({ error: 'パスワードが' })
     }
+
+    // tokenにする値,　シークレットキー
+    const token = sign({ id: user.id }, process.env.SECRET_KEY!, {
+        expiresIn: '1d'
+    })
+
+    return res.json({ token })
 })
 
 app.listen(PORT, () => console.log(`server is running on Port ${PORT}`))
