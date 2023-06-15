@@ -13,7 +13,7 @@ datasource db {
 
 
 model User {
-  id Int @id @default(autoincrement())
+  id String @id @default(dbgenerated("uuid_generate_v4()"))
   username String
   email String @unique
   password String
@@ -24,6 +24,6 @@ model Post {
   id Int @id @default(autoincrement())
   content String
   createdAt DateTime @default(now())
-  authId Int
+  authId String
   auth User @relation(fields: [authId], references: [id])
 }
