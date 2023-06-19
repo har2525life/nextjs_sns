@@ -1,6 +1,7 @@
 'use client'
 
 import apiClient from '@/api/apiClient'
+import { useAuth } from '@/context/auth'
 import Head from 'next/head'
 import { useRouter } from 'next/navigation'
 import React from 'react'
@@ -9,6 +10,8 @@ import { useForm } from 'react-hook-form'
 const LoginPage = () => {
     const { register, reset, handleSubmit } = useForm<Login>()
     const router = useRouter()
+
+    const { login } = useAuth()
     const onSubmit = async (event: Login) => {
         console.log(event)
         const { email, password } = event
@@ -20,7 +23,8 @@ const LoginPage = () => {
             })
 
             const token = response.data.token
-            console.log(token)
+            login(token)
+
             router.push('/')
         } catch (error) {
             console.log(error)
