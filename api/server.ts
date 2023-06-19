@@ -1,5 +1,6 @@
 import express, { Application } from 'express'
 import authRoute from "./routes/auth"
+import postsRoute from "./routes/post"
 import cors from "cors"
 const app: Application = express()
 
@@ -11,5 +12,6 @@ app.use(express.json())
 app.use(cors())
 
 app.use("/api/auth", authRoute)
+app.use("/api/posts", postsRoute)
 
 app.listen(PORT, () => console.log(`server is running on Port ${PORT}`))
