@@ -1,7 +1,9 @@
-import Image from 'next/image'
+import Timeline from '@/components/timeline'
 
 export default function Home() {
-  return (
-    <h1>hello</h1>
-  )
+    return (
+        <div>
+            <Timeline />
+        </div>
+    )
 }
